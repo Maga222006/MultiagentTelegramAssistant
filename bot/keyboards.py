@@ -4,6 +4,7 @@ def get_main_keyboard() -> ReplyKeyboardMarkup:
     keyboard = [
         [KeyboardButton(text="📍 Send Location", request_location=True)],
         [KeyboardButton(text="💾 Clear Chat History",)],
+        [KeyboardButton(text="🤖 Set Assistant Name", )],
         [KeyboardButton(text="🌐 Set OpenAI API Base")],
         [KeyboardButton(text="🔑 Set OpenAI API Key")],
         [KeyboardButton(text="🧠 Set Model")],

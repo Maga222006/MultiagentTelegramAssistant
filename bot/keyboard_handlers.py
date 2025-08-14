@@ -16,11 +16,17 @@ class ConfigStates(StatesGroup):
     weather_key = State()
     github_token = State()
     tavily_key = State()
+    assistant_name = State()
 
 @router.message(F.text == "🔑 Set OpenAI API Key")
 async def ask_openai_key(msg: Message, state: FSMContext):
     await msg.answer("Please send your OpenAI API Key:")
     await state.set_state(ConfigStates.openai_key)
+
+@router.message(F.text == "🤖 Set Assistant Name")
+async def ask_openai_key(msg: Message, state: FSMContext):
+    await msg.answer("Please send your OpenAI API Key:")
+    await state.set_state(ConfigStates.assistant_name)
 
 @router.message(F.text == "🌐 Set OpenAI API Base")
 async def ask_openai_base(msg: Message, state: FSMContext):
@@ -91,6 +97,18 @@ async def save_openai_base(msg: Message, state: FSMContext):
         "openai_api_base": msg.text
     }
     await msg.answer("✅ OpenAI API Base saved.")
+    await state.clear()
+    await call_multi_agent_system(state=state_, modality="authorization")
+
+@router.message(F.text, ConfigStates.assistant_name)
+async def save_model(msg: Message, state: FSMContext):
+    state_ = {
+        "user_id": str(msg.from_user.id),
+        "first_name": msg.from_user.first_name,
+        "last_name": msg.from_user.last_name,
+        "assistant_name": msg.text
+    }
+    await msg.answer("✅ Assistant's name saved.")
     await state.clear()
     await call_multi_agent_system(state=state_, modality="authorization")
 
