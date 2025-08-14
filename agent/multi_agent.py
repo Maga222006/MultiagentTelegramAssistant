@@ -1,0 +1,55 @@
+import os
+import json
+import httpx
+from typing import TypedDict, Literal
+from langchain_core.messages import AnyMessage
+
+
+
+class State(TypedDict):
+    message: AnyMessage
+    user_id: str
+    first_name: str
+    last_name: str
+    assistant_name: str
+    latitude: str
+    longitude: str
+    location: str
+    openweathermap_api_key: str
+    github_token: str
+    tavily_api_key: str
+    openai_api_key: str
+    openai_api_base: str
+    model: str
+    image_model: str
+    stt_model: str
+    clear_history: bool
+    messages: list
+
+
+async def call_multi_agent_system(
+    state: State,
+    modality: Literal["text", "voice", "image", "authorzation"] = "text",
+    file_name: str = None,
+    file_path: str = None
+):
+    url = f"{os.getenv('BASE_URL')}/{modality}"
+
+    async with httpx.AsyncClient() as client:
+        if modality in ["text", "authorization"]:
+            response = await client.post(
+                url=url,
+                data={"state": json.dumps(state)},
+                timeout=60
+            )
+        else:
+            with open(file_path, "rb") as file:
+                response = await client.post(
+                    url=url,
+                    data={"state": json.dumps(state)},
+                    files={"file": (file_name, file)},
+                    timeout=60
+                )
+
+    response.raise_for_status()
+    return response.json()

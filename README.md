@@ -1,27 +1,26 @@
 # Multi-agent Telegram Assistant
 
-**Multi-agent Telegram Assistant** is a Telegram bot powered by a **LangGraph-based multi-agent system**. It coordinates multiple agents for tasks like web search, code execution, and API access. The bot uses PostgreSQL for memory storage and integrates with LangChain tools, all within a seamless Telegram interface.
+**MultiagentTelegramAssistant** is a Telegram bot wrapper built on top of [MultiagentPersonalAssistant](https://github.com/Maga222006/MultiagentPersonalAssistant). It provides a user-friendly Telegram interface to interact with a LangGraph-powered multi-agent system capable of handling tasks such as web search, code execution, weather queries, and more.
+
+The core logic of the assistant—including agent coordination, tool execution, and memory—is implemented in the `MultiagentPersonalAssistant` backend. This repository simply wraps that functionality in a Telegram bot interface using **Aiogram**.
 
 ---
 
 ## 🚀 Features
 
-- LangGraph multi-agent orchestration
-- Telegram Bot interface
-- PostgreSQL-backed message history
-- Web search, code execution, and API integration
-- Asynchronous, modular, and configurable
+- Acts as a Telegram-based interface for the multi-agent assistant  
+- Sends user prompts to the backend agent system  
+- Returns LLM-generated, tool-enhanced responses  
 
 ---
 
 ## 🛠 Configuration
 
-Set the following variables in `database/config.py` before running the project:
+Set the following variables in `.env` before running the project:
 
-```python
-# database/config.py
-DATABASE_URL = "postgresql+asyncpg://user:password@host:port/dbname"
-TOKEN = "your-telegram-bot-token"
+```.env
+BOT_TOKEN = <telegram_bot_token>
+BASE_URL = <multiagent_personal_assistant_server_url>
 ```
 
 ---
@@ -46,14 +45,6 @@ docker build -t multiagent-telegram-assistant .
 ```bash
 docker run -d --name multiagent-telegram-assistant multiagent-telegram-assistant
 ```
-
----
-
-## 📖 Notes
-
-- Make sure your PostgreSQL database is running and accessible.
-- The `TOKEN` must be a valid token from BotFather.
-- All required configuration is set inside `database/config.py` before building and running the Docker container.
 
 ---
 
