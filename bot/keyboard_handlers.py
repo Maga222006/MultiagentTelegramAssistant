@@ -57,6 +57,17 @@ async def ask_tavily_key(msg: Message, state: FSMContext):
     await msg.answer("Please enter your Tavily API key:")
     await state.set_state(ConfigStates.tavily_key)
 
+@router.message(F.text == "💾 Clear Chat History")
+async def ask_openai_key(msg: Message, state: FSMContext):
+    state_ = {
+        "user_id": str(msg.from_user.id),
+        "first_name": msg.from_user.first_name,
+        "last_name": msg.from_user.last_name,
+        "clear_history": True
+    }
+    await msg.answer("✅ Assistant's chat history cleared.")
+    await call_multi_agent_system(state=state_, modality="authorization")
+
 # Handlers to save inputs
 @router.message(F.text, ConfigStates.openai_key)
 async def save_openai_key(msg: Message, state: FSMContext):
