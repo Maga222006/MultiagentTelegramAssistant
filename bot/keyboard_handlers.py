@@ -11,7 +11,7 @@ class ConfigStates(StatesGroup):
     openai_key = State()
     openai_base = State()
     model = State()
-    image_model = State()
+    spare_model = State()
     stt_model = State()
     weather_key = State()
     github_token = State()
@@ -38,10 +38,10 @@ async def ask_model(msg: Message, state: FSMContext):
     await msg.answer("Please enter the model name (e.g. gpt-4, gpt-3.5-turbo):")
     await state.set_state(ConfigStates.model)
 
-@router.message(F.text == "🖼️ Set Image Model")
-async def ask_image_model(msg: Message, state: FSMContext):
-    await msg.answer("Please enter the image model name:")
-    await state.set_state(ConfigStates.image_model)
+@router.message(F.text == "🧠 Set Spare Model")
+async def ask_spare_model(msg: Message, state: FSMContext):
+    await msg.answer("Please enter the spare model name:")
+    await state.set_state(ConfigStates.spare_model)
 
 @router.message(F.text == "🎧 Set STT Model")
 async def ask_stt_model(msg: Message, state: FSMContext):
@@ -126,13 +126,13 @@ async def save_model(msg: Message, state: FSMContext):
     await call_multi_agent_system(state=state_, modality="authorization")
 
 
-@router.message(F.text, ConfigStates.image_model)
-async def save_image_model(msg: Message, state: FSMContext):
+@router.message(F.text, ConfigStates.spare_model)
+async def save_spare_model(msg: Message, state: FSMContext):
     state_ = {
         "user_id": str(msg.from_user.id),
         "first_name": msg.from_user.first_name,
         "last_name": msg.from_user.last_name,
-        "image_model": msg.text
+        "spare_model": msg.text
     }
     await msg.answer("✅ Image model saved.")
     await state.clear()

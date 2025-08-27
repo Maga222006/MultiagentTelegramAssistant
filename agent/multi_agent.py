@@ -4,8 +4,6 @@ import httpx
 from typing import TypedDict, Literal
 from langchain_core.messages import AnyMessage
 
-
-
 class State(TypedDict):
     message: AnyMessage
     user_id: str
@@ -21,7 +19,7 @@ class State(TypedDict):
     openai_api_key: str
     openai_api_base: str
     model: str
-    image_model: str
+    spare_model: str
     stt_model: str
     clear_history: bool
     messages: list
@@ -40,7 +38,7 @@ async def call_multi_agent_system(
             response = await client.post(
                 url=url,
                 data={"state": json.dumps(state)},
-                timeout=60
+                timeout=5000
             )
         else:
             with open(file_path, "rb") as file:
@@ -48,7 +46,7 @@ async def call_multi_agent_system(
                     url=url,
                     data={"state": json.dumps(state)},
                     files={"file": (file_name, file)},
-                    timeout=60
+                    timeout=5000
                 )
 
     response.raise_for_status()
