@@ -1,11 +1,9 @@
-import os
-
 from bot.keyboard_handlers import router as config_router
-
 from aiogram import Bot, Dispatcher
 from bot.handlers import router
-import asyncio
 from dotenv import load_dotenv
+import asyncio
+import os
 
 load_dotenv()
 

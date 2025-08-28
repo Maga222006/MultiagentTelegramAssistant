@@ -15,7 +15,6 @@ def get_main_keyboard() -> ReplyKeyboardMarkup:
         [KeyboardButton(text="🔍 Set Tavily API Key")]
 
     ]
-
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
         resize_keyboard=True,

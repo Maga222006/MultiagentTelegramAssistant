@@ -1,9 +1,8 @@
+from agent.multi_agent import call_multi_agent_system
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from aiogram import Router, F
-
-from agent.multi_agent import call_multi_agent_system
 
 router = Router()
 
