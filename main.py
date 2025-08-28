@@ -1,5 +1,6 @@
 from bot.keyboard_handlers import router as config_router
 from aiogram import Bot, Dispatcher
+from aiogram.enums import ParseMode
 from bot.handlers import router
 from dotenv import load_dotenv
 import asyncio
@@ -7,7 +8,7 @@ import os
 
 load_dotenv()
 
-bot = Bot(token=os.getenv("BOT_TOKEN"))
+bot = Bot(token=os.getenv("BOT_TOKEN"), parse_mode=ParseMode.MarkdownV2)
 dp = Dispatcher()
 
 dp.include_router(config_router)
