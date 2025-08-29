@@ -6,6 +6,7 @@ import os
 
 class State(TypedDict):
     message: AnyMessage
+    file_url: str
     user_id: str
     first_name: str
     last_name: str
@@ -27,27 +28,14 @@ class State(TypedDict):
 
 async def call_multi_agent_system(
     state: State,
-    modality: Literal["text", "voice", "image", "authorzation"] = "text",
-    file_name: str = None,
-    file_path: str = None
+    modality: Literal["text", "voice", "image", "file", "authorzation"] = "text",
 ):
     url = f"{os.getenv('BASE_URL')}/{modality}"
-
     async with httpx.AsyncClient() as client:
-        if modality in ["text", "authorization"]:
-            response = await client.post(
-                url=url,
-                data={"state": json.dumps(state)},
-                timeout=5000
-            )
-        else:
-            with open(file_path, "rb") as file:
-                response = await client.post(
-                    url=url,
-                    data={"state": json.dumps(state)},
-                    files={"file": (file_name, file)},
-                    timeout=5000
-                )
-
+        response = await client.post(
+            url=url,
+            data={"state": json.dumps(state)},
+            timeout=5000
+        )
     response.raise_for_status()
     return response.json()
