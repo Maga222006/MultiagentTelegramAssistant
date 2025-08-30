@@ -127,10 +127,12 @@ async def document_handler(msg: Message):
         "Thinking..."
     ]))
     await msg.bot.send_chat_action(chat_id=msg.from_user.id, action=ChatAction.UPLOAD_DOCUMENT)
-    file = await msg.bot.get_file(msg.photo[-1].file_id)
+    file = await msg.bot.get_file(msg.document.file_id)
     file_path = file.file_path
-    file_name = f"{uuid.uuid4()}.jpg"
-    file_path_ = f"mediafiles/{file_name}.jpg"
+
+    ext = os.path.splitext(file_path.split("?")[0])[1].lower()
+    file_name = f"{uuid.uuid4()}{ext}"
+    file_path_ = f"mediafiles/{file_name}{ext}"
     await msg.bot.download_file(file_path, file_path_)
     response = await call_multi_agent_system(
         state=state,
