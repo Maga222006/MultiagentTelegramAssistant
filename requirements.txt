@@ -11,6 +11,7 @@ timezonefinder>=7.0.1
 geocoder>=1.38.1
 aiosqlite>=0.21.0
 requests>=2.32.4
+speechbrain>=1.0.3
 aiogram>=3.21.0
 aiohttp>=3.12.14
 colorama>=0.4.6

@@ -2,6 +2,7 @@ from aiogram.types import Message, FSInputFile
 from agent.text_to_speech import voice
 from agent.multi_agent import call_multi_agent_system
 from bot.keyboards import get_main_keyboard
+from aiogram.enums import ParseMode
 from aiogram.enums import ChatAction
 from aiogram.filters import Command
 from aiogram import Router, F
@@ -41,6 +42,7 @@ async def voice_handler(msg: Message):
     await msg.bot.send_chat_action(chat_id=msg.from_user.id, action=ChatAction.UPLOAD_VOICE)
     file = await msg.bot.get_file(msg.voice.file_id)
     file_path = file.file_path
+    print(file_path)
     file_name = uuid.uuid4()
     await msg.bot.download_file(file_path, f'mediafiles/{file_name}.ogg')
     message = await msg.answer(random.choice([
@@ -93,8 +95,9 @@ async def photo_handler(msg: Message):
     await msg.bot.send_chat_action(chat_id=msg.from_user.id, action=ChatAction.UPLOAD_PHOTO)
     file = await msg.bot.get_file(msg.photo[-1].file_id)
     file_path = file.file_path
+    print(file_path)
     file_name = f"{uuid.uuid4()}.jpg"
-    file_path_ = f"mediafiles/{file_name}.jpg"
+    file_path_ = f"mediafiles/{file_name}"
     await msg.bot.download_file(file_path, file_path_)
     response = await call_multi_agent_system(
         state=state,
@@ -104,7 +107,7 @@ async def photo_handler(msg: Message):
     )
     await msg.bot.send_chat_action(chat_id=msg.from_user.id, action=ChatAction.TYPING)
     await message.edit_text(response['messages'][-1]['content'])
-    os.remove(file_path)
+    os.remove(file_path_)
 
 @router.message(F.document)
 async def document_handler(msg: Message):
@@ -129,10 +132,11 @@ async def document_handler(msg: Message):
     await msg.bot.send_chat_action(chat_id=msg.from_user.id, action=ChatAction.UPLOAD_DOCUMENT)
     file = await msg.bot.get_file(msg.document.file_id)
     file_path = file.file_path
+    print(file_path)
 
     ext = os.path.splitext(file_path.split("?")[0])[1].lower()
     file_name = f"{uuid.uuid4()}{ext}"
-    file_path_ = f"mediafiles/{file_name}{ext}"
+    file_path_ = f"mediafiles/{file_name}"
     await msg.bot.download_file(file_path, file_path_)
     response = await call_multi_agent_system(
         state=state,
@@ -142,7 +146,7 @@ async def document_handler(msg: Message):
     )
     await msg.bot.send_chat_action(chat_id=msg.from_user.id, action=ChatAction.TYPING)
     await message.edit_text(response['messages'][-1]['content'])
-    os.remove(file_path)
+    os.remove(file_path_)
 
 @router.message(F.text)
 async def chat_handler(msg: Message):
@@ -169,4 +173,4 @@ async def chat_handler(msg: Message):
         modality="text"
     )
     await msg.bot.send_chat_action(chat_id=msg.from_user.id, action=ChatAction.TYPING)
-    await message.edit_text(response['messages'][-1]['content'])
+    await message.edit_text(text=response['messages'][-1]['content'], parse_mode=ParseMode.MARKDOWN)

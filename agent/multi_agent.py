@@ -16,11 +16,8 @@ class State(TypedDict):
     openweathermap_api_key: str
     github_token: str
     tavily_api_key: str
-    openai_api_key: str
-    openai_api_base: str
+    model_api_key: str
     model: str
-    spare_model: str
-    stt_model: str
     clear_history: bool
     messages: list
 

@@ -5,11 +5,7 @@ def get_main_keyboard() -> ReplyKeyboardMarkup:
         [KeyboardButton(text="📍 Send Location", request_location=True)],
         [KeyboardButton(text="💾 Clear Chat History",)],
         [KeyboardButton(text="🤖 Set Assistant Name", )],
-        [KeyboardButton(text="🌐 Set OpenAI API Base")],
-        [KeyboardButton(text="🔑 Set OpenAI API Key")],
-        [KeyboardButton(text="🧠 Set Model")],
-        [KeyboardButton(text="🧠 Set Spare Model")],
-        [KeyboardButton(text="🎧 Set STT Model")],
+        [KeyboardButton(text="🔑 Set Groq API Key")],
         [KeyboardButton(text="☁️ Set OpenWeatherMap Key")],
         [KeyboardButton(text="💙 Set GitHub Token")],
         [KeyboardButton(text="🔍 Set Tavily API Key")]
